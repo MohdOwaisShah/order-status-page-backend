@@ -12,8 +12,16 @@ app.use(express.urlencoded({ extended: true }));
 mongoose.connect(process.env.MONGO_URI);
 
 app.get("/get", (req, res) => {
-  res.send("hello world");
+  ReportModel.find()
+    .then((data) => {
+      res.status(200).json({ message: "Data fetched successfully", data: data });
+    })
+    .catch((err) => {
+      console.error("Error fetching data:", err);
+      res.status(500).json({ message: "Error fetching data", error: err });
+    });
 });
+
 app.get("/", (req, res) => {
   res.send("this is home page");
 });
